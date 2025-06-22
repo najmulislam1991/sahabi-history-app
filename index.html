@@ -1,0 +1,448 @@
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>সাহাবীদের গল্প</title>
+
+    <!-- ফন্ট: সোলাইমান লিপি -->
+    <link href="https://fonts.maateen.me/solaiman-lipi/font.css" rel="stylesheet">
+    
+    <!-- আইকন: Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+
+    <style>
+        /* === বেসিক স্টাইল এবং ফন্ট === */
+        :root {
+            --primary-color: #2c5282; /* একটি সুন্দর নীল রঙ */
+            --secondary-color: #e2e8f0;
+            --text-color: #1a202c;
+            --light-text-color: #f7fafc;
+            --background-color: #f7fafc;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'SolaimanLipi', sans-serif;
+            background-color: var(--background-color);
+            color: var(--text-color);
+            line-height: 1.8;
+            font-size: 16px;
+        }
+
+        /* === ড্রয়ার বা সাইড মেনু === */
+        .drawer {
+            position: fixed;
+            top: 0;
+            left: -300px; /* ডিফল্টভাবে লুকানো থাকবে */
+            width: 280px;
+            height: 100%;
+            background-color: white;
+            box-shadow: 4px 0 15px rgba(0, 0, 0, 0.1);
+            transition: left 0.35s ease-in-out;
+            z-index: 1000;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .drawer.open {
+            left: 0;
+        }
+
+        .drawer-header {
+            padding: 20px;
+            background-color: var(--primary-color);
+            color: var(--light-text-color);
+            text-align: center;
+        }
+
+        .drawer-header h3 {
+            margin: 0;
+            font-size: 1.4em;
+        }
+
+        .drawer-menu {
+            list-style: none;
+            flex-grow: 1;
+            overflow-y: auto;
+        }
+
+        .drawer-menu li a {
+            display: flex;
+            align-items: center;
+            padding: 15px 20px;
+            color: var(--text-color);
+            text-decoration: none;
+            border-bottom: 1px solid #edf2f7;
+            transition: background-color 0.2s;
+        }
+
+        .drawer-menu li a i {
+            margin-right: 15px;
+            color: var(--primary-color);
+            width: 24px;
+            text-align: center;
+            font-size: 1.1em;
+        }
+
+        .drawer-menu li a:hover,
+        .drawer-menu li a.active {
+            background-color: var(--secondary-color);
+            color: var(--primary-color);
+            font-weight: bold;
+        }
+
+        .drawer-menu li a.active i {
+             color: var(--primary-color);
+        }
+
+        /* === প্রধান কন্টেন্ট এলাকা === */
+        .main-content {
+            transition: margin-left 0.35s ease-in-out;
+        }
+
+        .top-bar {
+            display: flex;
+            align-items: center;
+            background-color: var(--primary-color);
+            color: var(--light-text-color);
+            padding: 15px 20px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+            position: sticky;
+            top: 0;
+            z-index: 500;
+        }
+
+        .menu-btn {
+            background: none;
+            border: none;
+            color: var(--light-text-color);
+            font-size: 24px;
+            cursor: pointer;
+            margin-right: 15px;
+        }
+        
+        #page-title {
+            font-size: 1.5em;
+        }
+
+        main {
+            padding: 25px;
+        }
+
+        .content-page {
+            display: none;
+            animation: fadeIn 0.5s ease-in-out;
+        }
+
+        .content-page.active {
+            display: block;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        /* === কন্টেন্টের ভেতরের স্টাইল === */
+        .page-header {
+            font-size: 2em;
+            color: var(--primary-color);
+            border-bottom: 3px solid var(--primary-color);
+            padding-bottom: 10px;
+            margin-bottom: 20px;
+        }
+
+        p, .story-content {
+            font-size: 1.1em;
+            margin-bottom: 15px;
+            text-align: justify;
+        }
+        
+        .home-banner {
+             text-align: center;
+        }
+        
+        .home-banner img {
+            max-width: 100%;
+            height: auto;
+            border-radius: 12px;
+            box-shadow: 0 8px 20px rgba(0,0,0,0.1);
+        }
+
+        /* === যোগাযোগের বক্স === */
+        .contact-card {
+            background-color: white;
+            border: 1px solid #e2e8f0;
+            border-radius: 15px;
+            padding: 30px;
+            margin-top: 20px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+            max-width: 500px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .contact-card .name {
+            font-size: 1.8em;
+            font-weight: bold;
+            color: var(--text-color);
+            text-transform: uppercase;
+            text-align: center;
+            margin-bottom: 5px;
+        }
+
+        .contact-card .title {
+            font-size: 1.2em;
+            color: #718096;
+            text-align: center;
+            margin-bottom: 20px;
+        }
+        
+        .contact-card .divider {
+            border: 0;
+            height: 1px;
+            background: #e2e8f0;
+            margin-bottom: 25px;
+        }
+        
+        .contact-card .info-item {
+            display: flex;
+            align-items: center;
+            margin-bottom: 15px;
+            font-size: 1.1em;
+        }
+        
+        .contact-card .info-item i {
+            color: var(--primary-color);
+            margin-right: 20px;
+            font-size: 1.5em;
+            width: 30px;
+            text-align: center;
+        }
+
+        /* === শেয়ার করার জন্য নোটিফিকেশন === */
+        #notification {
+            position: fixed;
+            bottom: -100px; /* Initially hidden */
+            left: 50%;
+            transform: translateX(-50%);
+            background-color: #2d3748;
+            color: white;
+            padding: 15px 25px;
+            border-radius: 8px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+            z-index: 2000;
+            transition: bottom 0.5s ease-in-out;
+            text-align: center;
+        }
+        
+        /* ড্রয়ার খোলার সময় ব্যাকগ্রাউন্ড ডার্ক করার জন্য */
+        .overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            z-index: 999;
+        }
+        .overlay.active {
+            display: block;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- বাম পাশের ড্রয়ার -->
+    <nav class="drawer" id="drawer">
+        <div class="drawer-header">
+            <h3>সাহাবীদের গল্প</h3>
+        </div>
+        <ul class="drawer-menu" id="drawer-menu">
+            <li><a href="#" class="nav-link active" data-target="home"><i class="fas fa-home"></i> হোম</a></li>
+            <hr>
+            <li><a href="#" class="nav-link" data-target="abu-bakr"><i class="fas fa-user-circle"></i> আবু বকর (রাঃ)</a></li>
+            <li><a href="#" class="nav-link" data-target="umar"><i class="fas fa-user-circle"></i> উমর ইবনুল খাত্তাব (রাঃ)</a></li>
+            <li><a href="#" class="nav-link" data-target="usman"><i class="fas fa-user-circle"></i> উসমান ইবনে আফফান (রাঃ)</a></li>
+            <li><a href="#" class="nav-link" data-target="ali"><i class="fas fa-user-circle"></i> আলি ইবনে আবি তালিব (রাঃ)</a></li>
+            <li><a href="#" class="nav-link" data-target="talha"><i class="fas fa-user-circle"></i> তালহা ইবনে উবাইদুল্লাহ (রাঃ)</a></li>
+            <li><a href="#" class="nav-link" data-target="zubair"><i class="fas fa-user-circle"></i> যুবাইর ইবনুল আওয়াম (রাঃ)</a></li>
+            <li><a href="#" class="nav-link" data-target="abdur-rahman"><i class="fas fa-user-circle"></i> আব্দুর রহমান ইবনে আউফ (রাঃ)</a></li>
+            <li><a href="#" class="nav-link" data-target="saad"><i class="fas fa-user-circle"></i> সা'দ ইবনে আবি ওয়াক্কাস (রাঃ)</a></li>
+            <li><a href="#" class="nav-link" data-target="abu-ubaidah"><i class="fas fa-user-circle"></i> আবু উবাইদাহ ইবনুল জাররাহ (রাঃ)</a></li>
+            <li><a href="#" class="nav-link" data-target="saeed"><i class="fas fa-user-circle"></i> সাঈদ ইবনে যায়িদ (রাঃ)</a></li>
+            <hr>
+            <li><a href="#" class="nav-link" data-target="about-us"><i class="fas fa-info-circle"></i> আমাদের সম্পর্কে</a></li>
+            <li><a href="#" class="nav-link" data-target="contact"><i class="fas fa-envelope"></i> যোগাযোগ</a></li>
+            <li><a href="#" id="share-app"><i class="fas fa-share-alt"></i> অ্যাপ শেয়ার করুন</a></li>
+        </ul>
+    </nav>
+
+    <!-- ব্যাকগ্রাউন্ড Overlay -->
+    <div class="overlay" id="overlay"></div>
+
+    <!-- প্রধান কন্টেন্ট এলাকা -->
+    <div class="main-content" id="main-content">
+        <header class="top-bar">
+            <button class="menu-btn" id="menu-btn">&#9776;</button>
+            <h1 id="page-title">হোম</h1>
+        </header>
+        
+        <main>
+            <!-- হোম পেজ -->
+            <div id="home" class="content-page active">
+                <h2 class="page-header">অ্যাপে স্বাগতম</h2>
+                <p>এখানে ইসলামের মহান নক্ষত্র, রাসূল (ﷺ) এর প্রিয় সাহাবীদের জীবনের অনুপ্রেরণামূলক কাহিনী তুলে ধরা হয়েছে। বাম পাশের মেনু থেকে যেকোনো সাহাবীর নাম নির্বাচন করে তাঁর জীবনের আলোড়ন সৃষ্টিকারী ঘটনা পড়ুন এবং নিজের জীবনকে আলোকিত করুন।</p>
+                <div class="home-banner">
+                    <img src="data:image/jpeg;base64,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" alt="[সাহাবীদের সুন্দর ক্যালিগ্রাফি]">
+                </div>
+            </div>
+
+            <!-- সাহাবীদের গল্পের কন্টেন্ট -->
+            <div id="abu-bakr" class="content-page"><h2 class="page-header">আবু বকর (রাঃ)</h2><div class="story-content">নবী ﷺ এর হিজরতের সাথী, সিদ্দীক উপাধিতে ভূষিত, ইসলামের প্রথম খলিফা। বিপদের সময় তাঁর অবিচল আস্থা ও মহানবী ﷺ এর প্রতি ভালোবাসা ছিল অতুলনীয়।</div></div>
+            <div id="umar" class="content-page"><h2 class="page-header">উমর ইবনুল খাত্তাব (রাঃ)</h2><div class="story-content">'আল-ফারুক' বা সত্য-মিথ্যার পার্থক্যকারী। তাঁর শাসনামলে ইসলামী খিলাফত সুবিশাল রূপ লাভ করে এবং ন্যায়বিচার প্রতিষ্ঠিত হয়। রাতের আঁধারে তিনি সাধারণ মানুষের অবস্থা দেখতে বের হতেন।</div></div>
+            <div id="usman" class="content-page"><h2 class="page-header">উসমান ইবনে আফফান (রাঃ)</h2><div class="story-content">'জুননুরাইন' বা দুই জ্যোতির অধিকারী। তিনি ছিলেন লজ্জাশীল ও অত্যন্ত দানশীল। তাঁর অর্থায়নে মুসলিমরা অনেক সংকট থেকে মুক্তি পেয়েছে এবং তাঁর সময়েই কুরআন সংকলন চূড়ান্ত রূপ পায়।</div></div>
+            <div id="ali" class="content-page"><h2 class="page-header">আলি ইবনে আবি তালিব (রাঃ)</h2><div class="story-content">'আসাদুল্লাহ' বা আল্লাহর সিংহ। তিনি ছিলেন জ্ঞানের দরজা এবং অসীম সাহসী এক যোদ্ধা। রাসূল ﷺ এর শৈশবের সঙ্গী ও জামাতা।</div></div>
+            <div id="talha" class="content-page"><h2 class="page-header">তালহা ইবনে উবাইদুল্লাহ (রাঃ)</h2><div class="story-content">জীবিত শহীদ হিসেবে পরিচিত। উহুদের যুদ্ধে তিনি নিজের শরীর দিয়ে রাসূল ﷺ কে রক্ষা করেছিলেন এবং মারাত্মকভাবে আহত হয়েছিলেন।</div></div>
+            <div id="zubair" class="content-page"><h2 class="page-header">যুবাইর ইবনুল আওয়াম (রাঃ)</h2><div class="story-content">রাসূল ﷺ এর সাহায্যকারী বা 'حواري' হিসেবে খ্যাত। তিনি ছিলেন ইসলামের প্রথম তরবারি কোষমুক্তকারী।</div></div>
+            <div id="abdur-rahman" class="content-page"><h2 class="page-header">আব্দুর রহমান ইবনে আউফ (রাঃ)</h2><div class="story-content">অত্যন্ত ধনী এবং দানশীল সাহাবী। তিনি তাঁর সম্পদ আল্লাহর রাস্তায় অকাতরে ব্যয় করতেন।</div></div>
+            <div id="saad" class="content-page"><h2 class="page-header">সা'দ ইবনে আবি ওয়াক্কাস (রাঃ)</h2><div class="story-content">তাঁর دعا কবুল হতো। পারস্য বিজয়ের মহানায়ক এবং একজন দক্ষ তীরন্দাজ ছিলেন।</div></div>
+            <div id="abu-ubaidah" class="content-page"><h2 class="page-header">আবু উবাইদাহ ইবনুল জাররাহ (রাঃ)</h2><div class="story-content">এই উম্মতের أمين বা 'বিশ্বস্ত ব্যক্তি' হিসেবে পরিচিত। অত্যন্ত বিনয়ী এবং দায়িত্বশীল একজন সেনাপতি ছিলেন।</div></div>
+            <div id="saeed" class="content-page"><h2 class="page-header">সাঈদ ইবনে যায়িদ (রাঃ)</h2><div class="story-content">দুনিয়াতে জান্নাতের সুসংবাদপ্রাপ্ত عشرة مبشرة-এর একজন। তিনি ছিলেন অত্যন্ত ন্যায়পরায়ণ।</div></div>
+
+            <!-- আমাদের সম্পর্কে -->
+            <div id="about-us" class="content-page">
+                <h2 class="page-header">আমাদের সম্পর্কে</h2>
+                <h3>Nibras Soft Ltd</h3>
+                <p>নিবরাস সফট লিমিটেড একটি প্রযুক্তি-ভিত্তিক প্রতিষ্ঠান যা মানুষের জীবনকে সহজ ও সুন্দর করার লক্ষ্যে কাজ করে। আমরা বিশ্বাস করি, প্রযুক্তির সঠিক ব্যবহার নতুন প্রজন্মের কাছে ইসলামের সঠিক জ্ঞান ও আদর্শ পৌঁছে দিতে পারে। 'সাহাবীদের গল্প' অ্যাপটি আমাদের সেই প্রচেষ্টারই একটি ক্ষুদ্র অংশ, যার মাধ্যমে আমরা নবী মুহাম্মদ (ﷺ) এর মহান সঙ্গীদের ত্যাগ ও আদর্শের কাহিনীগুলো সবার মাঝে ছড়িয়ে দিতে চাই।</p>
+                 <p>আমাদের লক্ষ্য হলো এমন সব ডিজিটাল পণ্য তৈরি করা, যা মানুষের দৈনন্দিন জীবনে ইতিবাচক পরিবর্তন আনবে এবং তাদের জ্ঞান ও বিশ্বাসের ভিত্তি আরও মজবুত করবে।</p>
+            </div>
+
+            <!-- যোগাযোগ -->
+            <div id="contact" class="content-page">
+                <h2 class="page-header">যোগাযোগ</h2>
+                <div class="contact-card">
+                    <p class="name">নাজমুল ইসলাম</p>
+                    <p class="title">ডেভেলপার, Nibras Soft Ltd</p>
+                    <hr class="divider">
+                    <div class="info-item">
+                        <i class="fas fa-map-marker-alt"></i>
+                        <span>দিঘলিয়া, কোলা দিঘলিয়া - ৭৫১০, লোহাগড়া, নড়াইল।</span>
+                    </div>
+                    <div class="info-item">
+                        <i class="fas fa-phone-alt"></i>
+                        <span>+৮৮ ০১২৩৪ ৫৬৭৮</span>
+                    </div>
+                    <div class="info-item">
+                        <i class="fas fa-envelope"></i>
+                        <span>developer@nibrassoft.com</span>
+                    </div>
+                </div>
+            </div>
+
+        </main>
+    </div>
+
+    <!-- নোটিফিকেশন দেখানোর জন্য এলিমেন্ট -->
+    <div id="notification"></div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const menuBtn = document.getElementById('menu-btn');
+            const drawer = document.getElementById('drawer');
+            const overlay = document.getElementById('overlay');
+            const mainContent = document.getElementById('main-content');
+            const navLinks = document.querySelectorAll('.nav-link');
+            const contentPages = document.querySelectorAll('.content-page');
+            const pageTitle = document.getElementById('page-title');
+            const shareBtn = document.getElementById('share-app');
+            const notification = document.getElementById('notification');
+
+            // মেনু বাটন ক্লিক করে ড্রয়ার খোলা/বন্ধ করা
+            const toggleDrawer = () => {
+                drawer.classList.toggle('open');
+                overlay.classList.toggle('active');
+            };
+
+            menuBtn.addEventListener('click', toggleDrawer);
+            overlay.addEventListener('click', toggleDrawer);
+
+            // ন্যাভিগেশন লিঙ্ক ক্লিক করলে কন্টেন্ট পরিবর্তন
+            navLinks.forEach(link => {
+                link.addEventListener('click', (e) => {
+                    e.preventDefault(); 
+                    
+                    const targetId = link.getAttribute('data-target');
+                    if (!targetId) return;
+                    
+                    // সব পেজ হাইড করা
+                    contentPages.forEach(page => page.classList.remove('active'));
+                    
+                    // টার্গেট করা পেজ দেখানো
+                    const targetPage = document.getElementById(targetId);
+                    if (targetPage) {
+                        targetPage.classList.add('active');
+                    }
+                    
+                    // শিরোনাম পরিবর্তন করা
+                    // শুধু সাহাবীর নামে (রাঃ) অংশটুকু বাদ দিয়ে শিরোনাম দেখানোর জন্য এই কোড
+                    const linkText = link.textContent.trim().replace(/\s*\(রাঃ\)/, '');
+                    pageTitle.textContent = linkText;
+
+                    // সব লিঙ্কের active ক্লাস রিমুভ করা
+                    navLinks.forEach(navLink => navLink.classList.remove('active'));
+                    
+                    // বর্তমান লিঙ্কে active ক্লাস যোগ করা
+                    link.classList.add('active');
+                    
+                    // ড্রয়ার বন্ধ করা
+                    if (drawer.classList.contains('open')) {
+                        toggleDrawer();
+                    }
+
+                    // ব্যবহারকারী নতুন পেজে গেলে তাকে পেজের শুরুতে নিয়ে যাওয়া
+                    window.scrollTo(0, 0);
+                });
+            });
+
+            // নোটিফিকেশন দেখানোর ফাংশন
+            const showNotification = (message) => {
+                notification.textContent = message;
+                notification.style.bottom = '20px';
+                setTimeout(() => {
+                    notification.style.bottom = '-100px';
+                }, 3000); // ৩ সেকেন্ড পর নোটিফিকেশন চলে যাবে
+            };
+
+            // অ্যাপ শেয়ার বাটন
+            shareBtn.addEventListener('click', (e) => {
+                 e.preventDefault();
+                if (navigator.share) {
+                    navigator.share({
+                        title: 'সাহাবীদের গল্প',
+                        text: 'রাসূল (ﷺ) এর সাহাবীদের জীবনের অনুপ্রেরণামূলক ঘটনা পড়ুন এই অ্যাপে।',
+                        url: window.location.href
+                    }).catch(error => console.log('শেয়ার করার সময় ত্রুটি হয়েছে', error));
+                } else {
+                    // যদি ব্রাউজার শেয়ার API সাপোর্ট না করে
+                    navigator.clipboard.writeText(window.location.href)
+                        .then(() => {
+                            showNotification('লিঙ্ক কপি করা হয়েছে। আপনি এখন শেয়ার করতে পারেন।');
+                        })
+                        .catch(() => {
+                            showNotification('দুঃখিত, আপনার ব্রাউজার এই ফিচারটি সাপোর্ট করে না।');
+                        });
+                }
+            });
+        });
+    </script>
+
+</body>
+</html>
